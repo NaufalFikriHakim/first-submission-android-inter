@@ -4,11 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserPreference
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.AllStoryResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.LoginResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.RegisterResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.retrofit.ApiService
 import com.dicoding.picodiploma.loginwithanimation.utils.AppExecutors
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import retrofit2.Callback
 
 class UserRepository private constructor(
@@ -34,6 +36,10 @@ class UserRepository private constructor(
 
     suspend fun login(email: String, password: String): LoginResponse{
         return apiService.login(email, password)
+    }
+
+    suspend fun getStories(): AllStoryResponse{
+        return apiService.getStories("Bearer " + userPreference.getSession().first().token)
     }
 
     companion object {

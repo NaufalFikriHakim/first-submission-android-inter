@@ -3,12 +3,16 @@ package com.dicoding.picodiploma.loginwithanimation.view.main
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListStoryItem
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMainBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
+import com.dicoding.picodiploma.loginwithanimation.view.main.adapter.StoryAdapter
 import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
 
 class MainActivity : AppCompatActivity() {
@@ -47,9 +51,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
-        binding.logoutButton.setOnClickListener {
-            viewModel.logout()
+        val layoutManager = LinearLayoutManager(this)
+        binding.rvStories.layoutManager = layoutManager
+
+        viewModel.listReview.observe(this) {
+            setStoriesData(it)
+            Log.d("data", it.toString())
         }
+    }
+
+    private fun setStoriesData(stories: List<ListStoryItem>){
+        val adapter = StoryAdapter()
+        adapter.submitList(stories)
+        binding.rvStories.adapter = adapter
+        Log.d("rv", "masuk")
     }
 
 }
