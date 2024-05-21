@@ -8,10 +8,16 @@ import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.LoginResponse
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.RegisterResponse
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityLoginBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 import com.dicoding.picodiploma.loginwithanimation.view.main.MainActivity
+import com.google.gson.Gson
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 class LoginActivity : AppCompatActivity() {
     private val viewModel by viewModels<LoginViewModel> {
@@ -44,25 +50,58 @@ class LoginActivity : AppCompatActivity() {
     private fun setupAction() {
         binding.loginButton.setOnClickListener {
             val email = binding.emailEditText.text.toString()
+            val password = binding.passwordEditText.text.toString()
 
             val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
 
             val viewModelLogin: LoginViewModel by viewModels {
                 factory
             }
-            viewModelLogin.saveSession(UserModel(email, "sample_token"))
-            AlertDialog.Builder(this).apply {
-                setTitle("Yeah!")
-                setMessage("Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
-                setPositiveButton("Lanjut") { _, _ ->
-                    val intent = Intent(context, MainActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                    finish()
+
+            lifecycleScope.launch {
+                try {
+                    //get success message
+                    val response = viewModel.login( email, password)
+                    val message = response.message
+                    message?.let { showSuccessDialog() }
+                    response.loginResult?.token?.let { viewModelLogin.saveSession(UserModel(email, response.loginResult.token)) }
+                } catch (e: HttpException) {
+                    //get error message
+                    val jsonInString = e.response()?.errorBody()?.string()
+                    val errorBody = Gson().fromJson(jsonInString, LoginResponse::class.java)
+                    val errorMessage = errorBody.message
+                    errorMessage?.let {showErrorDialog(it)}
                 }
-                create()
-                show()
             }
+
+
+
+        }
+    }
+    private fun showSuccessDialog(){
+        AlertDialog.Builder(this).apply {
+            setTitle("Yeah!")
+            setMessage("Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
+            setPositiveButton("Lanjut") { _, _ ->
+                val intent = Intent(context, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+                finish()
+            }
+            create()
+            show()
+        }
+
+    }
+
+    private fun showErrorDialog(errorMessage: String) {
+        // Using 'this@MainActivity' to get the Context within an Activity
+        AlertDialog.Builder(this).apply {
+            setTitle("Error")
+            setMessage(errorMessage)
+            setPositiveButton("OK", null)
+            create()
+            show()
         }
     }
 

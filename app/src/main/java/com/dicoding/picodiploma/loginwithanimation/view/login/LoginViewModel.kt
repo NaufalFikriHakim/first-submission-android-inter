@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dicoding.picodiploma.loginwithanimation.data.UserRepository
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.LoginResponse
 import kotlinx.coroutines.launch
 
 class LoginViewModel(private val repository: UserRepository) : ViewModel() {
@@ -11,5 +12,9 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
         viewModelScope.launch {
             repository.saveSession(user)
         }
+    }
+
+    suspend fun login(email: String, password: String): LoginResponse{
+        return repository.login(email, password)
     }
 }
