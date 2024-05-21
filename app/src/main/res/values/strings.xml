@@ -15,5 +15,6 @@
     <string name="logout">Keluar</string>
     <string name="description">Deskripsi</string>
     <string name="stories">Stories</string>
+    <string name="post">Post Story</string>
 
 </resources>

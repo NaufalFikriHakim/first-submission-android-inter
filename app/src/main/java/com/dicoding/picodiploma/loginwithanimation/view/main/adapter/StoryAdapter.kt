@@ -1,5 +1,6 @@
 package com.dicoding.picodiploma.loginwithanimation.view.main.adapter
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.dicoding.picodiploma.loginwithanimation.R
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListStoryItem
 import com.dicoding.picodiploma.loginwithanimation.databinding.ItemBinding
+import com.dicoding.picodiploma.loginwithanimation.view.detail.DetailActivity
 
 class StoryAdapter:ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
@@ -25,13 +27,19 @@ class StoryAdapter:ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_CA
         Log.d("log", "bind")
     }
     class MyViewHolder(val binding: ItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(review: ListStoryItem){
-            binding.nameTextView.text = review.name
-            binding.descTextView.text = review.description
+        fun bind(story: ListStoryItem){
+            binding.nameTextView.text = story.name
+            binding.descTextView.text = story.description
             Glide.with(itemView.context)
-                .load(review.photoUrl)
+                .load(story.photoUrl)
                 .apply(RequestOptions.placeholderOf(R.drawable.ic_loading).error(R.drawable.ic_error))
                 .into(binding.profileImageView)
+
+            itemView.setOnClickListener {
+                val intent = Intent(itemView.context, DetailActivity::class.java)
+                intent.putExtra("Story", story)
+                itemView.context.startActivity(intent)
+            }
         }
     }
     companion object {

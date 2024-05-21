@@ -1,6 +1,8 @@
 package com.dicoding.picodiploma.loginwithanimation.data.remote.response
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
 data class AllStoryResponse(
 
@@ -13,7 +15,7 @@ data class AllStoryResponse(
 	@field:SerializedName("message")
 	val message: String? = null
 )
-
+@Parcelize
 data class ListStoryItem(
 
 	@field:SerializedName("photoUrl")
@@ -28,12 +30,7 @@ data class ListStoryItem(
 	@field:SerializedName("description")
 	val description: String? = null,
 
-	@field:SerializedName("lon")
-	val lon: Any? = null,
-
 	@field:SerializedName("id")
 	val id: String? = null,
 
-	@field:SerializedName("lat")
-	val lat: Any? = null
-)
+): Parcelable

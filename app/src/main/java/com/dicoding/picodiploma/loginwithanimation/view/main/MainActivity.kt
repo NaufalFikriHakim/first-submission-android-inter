@@ -9,6 +9,7 @@ import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.picodiploma.loginwithanimation.R
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListStoryItem
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMainBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
@@ -57,6 +58,16 @@ class MainActivity : AppCompatActivity() {
         viewModel.listReview.observe(this) {
             setStoriesData(it)
             Log.d("data", it.toString())
+        }
+
+        binding.topAppBar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu1 -> {
+                    viewModel.logout()
+                    true
+                }
+                else -> false
+            }
         }
     }
 
