@@ -13,6 +13,7 @@ import com.dicoding.picodiploma.loginwithanimation.R
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListStoryItem
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMainBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
+import com.dicoding.picodiploma.loginwithanimation.view.camera.CameraActivity
 import com.dicoding.picodiploma.loginwithanimation.view.main.adapter.StoryAdapter
 import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
 
@@ -64,6 +65,11 @@ class MainActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.menu1 -> {
                     viewModel.logout()
+                    true
+                }
+                R.id.menu2 -> {
+                    val intent = Intent(this, CameraActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 else -> false

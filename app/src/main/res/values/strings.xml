@@ -16,5 +16,8 @@
     <string name="description">Deskripsi</string>
     <string name="stories">Stories</string>
     <string name="post">Post Story</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="upload">Upload</string>
 
 </resources>
