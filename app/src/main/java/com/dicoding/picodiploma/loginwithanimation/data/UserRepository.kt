@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserPreference
+import com.dicoding.picodiploma.loginwithanimation.data.remote.response.LoginResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.RegisterResponse
 import com.dicoding.picodiploma.loginwithanimation.data.remote.retrofit.ApiService
 import com.dicoding.picodiploma.loginwithanimation.utils.AppExecutors
@@ -31,8 +32,8 @@ class UserRepository private constructor(
         return apiService.register(name, email, password)
     }
 
-    suspend fun login(email: String, password: String){
-        ret
+    suspend fun login(email: String, password: String): LoginResponse{
+        return apiService.login(email, password)
     }
 
     companion object {
