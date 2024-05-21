@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.dicoding.picodiploma.loginwithanimation.data.UserRepository
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListStoryItem
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
@@ -26,6 +27,10 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
 
     fun getSession(): LiveData<UserModel> {
         return repository.getSession().asLiveData()
+    }
+
+    fun getUser(): Flow<UserModel> {
+        return repository.getSession()
     }
 
     fun logout() {
