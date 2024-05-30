@@ -1,9 +1,11 @@
 package com.dicoding.picodiploma.loginwithanimation.view.main.adapter
 
+import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +15,7 @@ import com.dicoding.picodiploma.loginwithanimation.R
 import com.dicoding.picodiploma.loginwithanimation.data.remote.response.ListStoryItem
 import com.dicoding.picodiploma.loginwithanimation.databinding.ItemBinding
 import com.dicoding.picodiploma.loginwithanimation.view.detail.DetailActivity
+import androidx.core.util.Pair
 
 class StoryAdapter:ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
@@ -38,7 +41,14 @@ class StoryAdapter:ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_CA
             itemView.setOnClickListener {
                 val intent = Intent(itemView.context, DetailActivity::class.java)
                 intent.putExtra("Story", story)
-                itemView.context.startActivity(intent)
+                val optionsCompat: ActivityOptionsCompat =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        itemView.context as Activity,
+                        Pair(binding.profileImageView, "profile"),
+                        Pair(binding.nameTextView, "name"),
+                        Pair(binding.descTextView, "description"),
+                    )
+                itemView.context.startActivity(intent, optionsCompat.toBundle())
             }
         }
     }

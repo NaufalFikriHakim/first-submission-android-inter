@@ -15,6 +15,7 @@ import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMainBindi
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 import com.dicoding.picodiploma.loginwithanimation.view.camera.CameraActivity
 import com.dicoding.picodiploma.loginwithanimation.view.main.adapter.StoryAdapter
+import com.dicoding.picodiploma.loginwithanimation.view.maps.MapsActivity
 import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
 
 class MainActivity : AppCompatActivity() {
@@ -69,6 +70,11 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.menu2 -> {
                     val intent = Intent(this, CameraActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.maps -> {
+                    val intent = Intent(this, MapsActivity::class.java)
                     startActivity(intent)
                     true
                 }

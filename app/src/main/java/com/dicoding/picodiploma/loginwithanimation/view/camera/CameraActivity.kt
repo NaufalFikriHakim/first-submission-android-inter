@@ -1,6 +1,7 @@
 package com.dicoding.picodiploma.loginwithanimation.view.camera
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -22,6 +23,7 @@ import com.dicoding.picodiploma.loginwithanimation.data.remote.retrofit.ApiConfi
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityCameraBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 import com.dicoding.picodiploma.loginwithanimation.view.getImageUri
+import com.dicoding.picodiploma.loginwithanimation.view.main.MainActivity
 import com.dicoding.picodiploma.loginwithanimation.view.main.MainViewModel
 import com.dicoding.picodiploma.loginwithanimation.view.uriToFile
 import com.google.gson.Gson
@@ -89,6 +91,7 @@ class CameraActivity : AppCompatActivity() {
                         val apiService = ApiConfig.getApiService()
                         val successResponse = apiService.uploadImage("Bearer " + viewModel.getUser().first().token, multipartBody, requestBody)
                         showToast(successResponse.message)
+                        startMainActivity()
                     } catch (e: HttpException) {
                         val errorBody = e.response()?.errorBody()?.string()
                         val errorResponse =
@@ -113,6 +116,11 @@ class CameraActivity : AppCompatActivity() {
     }
     private fun startGallery() {
         launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
+
+    private fun startMainActivity(){
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 
     private fun showImage() {
