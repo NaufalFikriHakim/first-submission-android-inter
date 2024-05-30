@@ -42,6 +42,9 @@ class UserRepository private constructor(
         return apiService.getStories("Bearer " + userPreference.getSession().first().token)
     }
 
+    suspend fun getStoriesWithLocation(): AllStoryResponse{
+        return apiService.getStoriesWithLocation("Bearer " + userPreference.getSession().first().token)
+    }
     companion object {
         @Volatile
         private var instance: UserRepository? = null

@@ -2,6 +2,8 @@ package com.dicoding.picodiploma.loginwithanimation.view.maps
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.dicoding.picodiploma.loginwithanimation.R
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -11,12 +13,16 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMapsBinding
+import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
 
+    private val viewModel by viewModels<MapsViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -41,9 +47,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
+        viewModel.listReview.observe(this){
+            it.forEach { data ->
+                val latLng = data.lat?.let { it1 -> data.lo?.let {it2 -> LatLng(it1, it2)} }
+                latLng?.let {
+                    mMap.addMarker(
+                        MarkerOptions()
+                            .position(latLng)
+                            .title(data.name)
+                            .snippet(data.description)
+                    )
+                }}
+
+        }
+
         // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        val indonesia = LatLng(6.0, 106.0)
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(indonesia))
+
+        mMap.uiSettings.isZoomControlsEnabled = true
+        mMap.uiSettings.isIndoorLevelPickerEnabled = true
+        mMap.uiSettings.isCompassEnabled = true
+        mMap.uiSettings.isMapToolbarEnabled = true
     }
 }
